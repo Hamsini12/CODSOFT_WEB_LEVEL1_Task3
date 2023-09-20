@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Calculator</title>
+    <style>
+    body {
+        height: 100vh;
+        background-color: #34282C;
+    }
+    h1{
+        margin-top:80px;
+        text-align:center;
+        font-size:3.5em;
+        font-family: Garamond;
+        background:linear-gradient(180deg,#008080,#20B2AA,#008080);
+        background-clip: content-box;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color:transparent;
+    }
+    .calculator {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 10px;
+        max-width: 400px;
+        width: 100%;
+        padding: 30px;
+        border: 2px groove #348781;
+        background-color: #413839;
+        box-shadow: 2px 3px 3px 2px #348781;
+        border-radius: 5px;
+        margin: 0 auto;
+    }
+    .calculator:hover{
+        transform: scale(1.1);
+    }
+
+    input[type="text"] {
+        grid-column: span 4;
+        padding: 10px;
+        font-size: 1.7em;
+        font-family: Segoe UI;
+        text-align: right;
+        color:darkgrey;
+        border-radius: 2rem;
+        background-color:darkslategrey;
+    }
+    button {
+        padding: 10px;
+        background: radial-gradient(ellipse at center,#20B2AA 0%,#348781 85%);
+        font-size: 24px;
+        text-align: center;
+        border-radius:20% 0% 50%;
+        border: 1px solid grey;
+        outline: none;
+        cursor: pointer;
+    }
+    .clear {
+        background-color: #f2f2f2;
+    }
+
+    </style>
+</head>
+<body>
+    <h1>CALCULATOR</h1>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <button class="number" value="7">7</button>
+        <button class="number" value="8">8</button>
+        <button class="number" value="9">9</button>
+        <button class="operator" value="/">/</button>
+        <button class="number" value="4">4</button>
+        <button class="number" value="5">5</button>
+        <button class="number" value="6">6</button>
+        <button class="operator" value="*">*</button>
+        <button class="number" value="1">1</button>
+        <button class="number" value="2">2</button>
+        <button class="number" value="3">3</button>
+        <button class="operator" value="-">-</button>
+        <button class="clear" value="AC">AC</button>
+        <button class="number" value="0">0</button>
+        <button class="operator" value="=">=</button>
+        <button class="operator" value="+">+</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const display = document.getElementById('display');
+        const buttons = document.querySelectorAll('button');
+
+        let currentInput = '';
+        let num1 = null;
+        let operator = null;
+
+        buttons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const buttonValue = button.value;
+
+                if (buttonValue === 'AC') {
+                    currentInput = '';
+                    num1 = null;
+                    operator = null;
+                } else if (buttonValue === '=') {
+                    if (operator && currentInput) {
+                        const num2 = parseFloat(currentInput);
+                        switch (operator) {
+                            case '+':
+                                currentInput = (num1 + num2).toString();
+                                break;
+                            case '-':
+                                currentInput = (num1 - num2).toString();
+                                break;
+                            case '*':
+                                currentInput = (num1 * num2).toString();
+                                break;
+                            case '/':
+                                if (num2 === 0) {
+                                    currentInput = 'Error';
+                                } else {
+                                    currentInput = (num1 / num2).toString();
+                                }
+                                break;
+                        }
+                        operator = null;
+                    }
+                } else if (isOperator(buttonValue)) {
+                    if (operator) {
+                        document.querySelector('[value="="]').click();
+                    }
+                    operator = buttonValue;
+                    num1 = parseFloat(currentInput);
+                    currentInput = '';
+                } else {
+                    currentInput = buttonValue;
+                }
+
+                display.value = currentInput;
+            });
+        });
+
+        function isOperator(value) {
+            return ['+', '-', '*', '/'].includes(value);
+        }
+        });
+
+    </script>
+</body>
+</html>
